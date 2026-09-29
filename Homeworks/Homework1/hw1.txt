@@ -1,0 +1,109 @@
+using System;
+class Program
+{
+    static double balik = 0;
+    static List<string> hist = new List<string>();
+    static void Main()
+    {
+        Console.Writeline("Введите начальный баланс: ");
+        double.TryParse(Console.ReadLine(), out balik);
+        while (true)
+        {
+            Console.WriteLine("1 - Баланс");
+            Console.WriteLine("2 - Пополнить");
+            Console.WriteLine("3 - Снять");
+            Console.WriteLine("4 - История операций");
+            Console.WriteLine("0 - Выйти");
+            Console.Writeline("Выберите пункт ");
+            string ch = Console.ReadLine();
+            if (ch == "1")
+            {
+                PrintBalik(balik);
+            }
+            else if (ch == "2")
+            {
+                Dep();
+            }
+            else if (ch == "3")
+            {
+                take();
+            }
+            else if (ch == "4")
+            {
+                PrintHist();
+            }
+            else if (ch == "0")
+            {
+                Console.WriteLine("До свидания");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Неверный пункт");
+            }
+        }
+    }
+
+    static void PrintBalik(double curBalik, string cur = "₽")
+    {
+        Console.WriteLine($"Текущий баланс: {curBalik} {cur}");
+    }
+
+    static void Dep()
+    {
+        Console.WriteLine("Введите сумму пополнения: ");
+        double amt;
+        if (!double.TryParse(Console.ReadLine(), out amt))
+        {
+            Console.WriteLine("Некорректная сумма");
+            return;
+        }
+        if (amt <= 0)
+        {
+            Console.WriteLine("Сумма должна быть положительна");
+            return;
+        }
+        balik += amt;
+        hist.Add($"Пополнение: +{amt} ₽");
+        Console.WriteLine($"Счёт пополнен на {amt} ₽. Текущий баланс: {balik} ₽");
+    }
+
+    static void take()
+    {
+        Console.WriteLine("Введите сумму снятия: ");
+        double amt;
+        if (!double.TryParse(Console.ReadLine(), out amt))
+        {
+            Console.WriteLine("Некорректная сумма");
+            return;
+        }
+        if (amt <= 0)
+        {
+            Console.WriteLine("Сумма должна быть положительна");
+            return;
+        }
+        if (amt > balik)
+        {
+            Console.WriteLine("Недостаточно средств");
+            return;
+        }
+        balik -= amt;
+        hist.Add($"Снятие: -{amt} ₽");
+        Console.WriteLine($"Снято {amt} ₽. Текущий баланс: {balik} ₽");
+    }
+
+    static void PrintHist()
+    {
+        if (hist.Count == 0)
+        {
+            Console.WriteLine("Истории операций нету");
+            return;
+        }
+
+        Console.WriteLine("История операций");
+        for (int i = 0; i < hist.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {hist[i]}");
+        }
+    }
+}
